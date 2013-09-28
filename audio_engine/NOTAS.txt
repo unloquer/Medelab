@@ -1,0 +1,4 @@
+Afrobeat-Machine -> https://github.com/jarbasjacome/Afrobeat-Machine
+ma4u -> http://practical-data.wikidot.com/#toc20
+obiwannabe -> http://www.obiwannabe.co.uk/html/toys/toys.html
+rc-patches -> https://github.com/danomatika/rc-patches

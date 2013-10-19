@@ -1,6 +1,7 @@
-#N canvas 0 54 1280 746 10;
+#N canvas 1 82 1013 717 10;
 #X declare -lib pduino;
-#N canvas 451 108 674 677 arduino-recieve 1;
+#X declare -lib pdcontainer;
+#N canvas 461 101 674 677 arduino-recieve 0;
 #N canvas 70 233 525 433 serin 0;
 #X obj 180 61 cnv 15 15 15 empty \$0-number-canvas 0 4 8 0 14 -233017
 -1 0;
@@ -76,8 +77,20 @@
 #X obj 55 526 debounce 100;
 #X obj 55 561 send from-arduino-digital;
 #X obj 168 275 delay 1100;
+#X msg 468 370 analogIns \$1 1;
+#X msg 518 340 0;
+#X msg 495 344 1;
+#X obj 473 323 t b b;
+#X text 516 320 Setea los pines analogos;
+#X floatatom 7 666 5 0 0 3 a0 - -;
+#X floatatom 55 655 5 0 0 3 a1 - -;
+#X text 96 654 analog inputs:;
+#X obj 7 605 route 0 1;
+#X obj 8 729 s analog0;
+#X obj 55 704 s analog1;
 #X connect 0 0 5 0;
 #X connect 1 0 4 0;
+#X connect 3 0 34 0;
 #X connect 3 1 23 0;
 #X connect 4 0 7 0;
 #X connect 5 0 22 0;
@@ -105,49 +118,605 @@
 #X connect 22 1 7 0;
 #X connect 23 0 24 0;
 #X connect 25 0 21 0;
+#X connect 25 0 29 0;
+#X connect 26 0 7 0;
+#X connect 27 0 26 0;
+#X connect 28 0 26 0;
+#X connect 29 0 28 0;
+#X connect 29 1 27 0;
+#X connect 31 0 35 0;
+#X connect 32 0 36 0;
+#X connect 34 0 31 0;
+#X connect 34 1 32 0;
 #X coords 0 -1 1 1 150 60 1 100 100;
 #X restore 17 -192 pd arduino-recieve;
-#X obj 634 -91 pd/slot 113 6 1 P;
-#X obj 429 -42 pd/slot 113 11 2 Q;
-#X obj 19 -42 pd/slot 113 13 2 Q;
-#X obj 223 -42 pd/slot 113 12 2 Q;
-#X obj 635 -42 pd/slot 113 10 2 Q;
-#X obj 429 -90 pd/slot 112 7 1 O;
-#X obj 223 -93 pd/slot 111 8 1 I;
-#X obj 18 -90 pd/slot 117 9 1 U;
 #X obj 19 13 pd/a-gig-in-tokyo;
 #X obj -60 -237;
 #X obj 1113 424;
-#N canvas 294 216 453 473 carpeta-samples 1;
-#X obj 109 83 getdir;
-#X msg 111 56 bang;
-#X obj 108 136 list2symbol;
-#X msg 178 77 symbol /;
-#X obj 64 222 folder_list;
-#X obj 67 19 t b b b b;
-#X obj 174 47 s loadbang1;
-#X obj 37 -10 t b b;
-#X obj 37 -33 inlet;
-#X text 73 -34 Bang;
-#X obj 64 251 outlet;
-#X msg 102 106 \$1 pd/audioloops/*;
-#X connect 0 0 11 0;
-#X connect 1 0 0 0;
-#X connect 2 0 4 1;
-#X connect 3 0 2 1;
-#X connect 4 0 10 0;
-#X connect 5 0 4 0;
-#X connect 5 1 1 0;
-#X connect 5 2 3 0;
-#X connect 5 3 6 0;
-#X connect 7 1 5 0;
-#X connect 8 0 7 0;
-#X connect 11 0 2 0;
-#X restore 776 145 pd carpeta-samples;
-#X obj 777 101 loadbang;
-#X obj 839 100 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
-#X obj 770 200 print;
-#X connect 12 0 15 0;
-#X connect 13 0 12 0;
-#X connect 14 0 12 0;
+#X obj 429 -90 pd/slot 112 7 1 O;
+#X obj 223 -93 pd/slot 111 8 1 I;
+#X obj 636 -95 pd/slot 113 6 1 P;
+#X obj 429 -42 pd/slot 113 11 2 Q;
+#X obj 19 -42 pd/slot 113 13 2 Q;
+#X obj 223 -42 pd/slot 113 12 2 Q;
+#X obj 636 -41 pd/slot 113 10 2 Q;
+#X obj 18 -90 pd/slot 117 9 1 U;
+#X obj 698 118 keyup;
+#X floatatom 701 159 5 0 0 0 - - -;
+#X text 298 -196 Controlador tab a s o;
+#N canvas 445 82 460 688 readme 0;
+#X text 63 87 1 = on/off;
+#X text 62 101 2 = on when pressed;
+#X text 64 135 6 = feedback echo;
+#X text 63 151 7 = distortion;
+#X text 10 87 GLOBAL:;
+#X text 20 55 KEYS:;
+#X text 64 176 z = gate;
+#X text 64 192 x = randomize channel 2 while gating channel 1;
+#X text 12 238 CHANNEL 1: q = random file;
+#X text 76 258 w = back to previous file;
+#X text 22 12 (many keys only work while pressed);
+#X text 70 296 r = mute;
+#X text 73 275 e = mute (when pressed);
+#X text 63 317 t = reverse;
+#X text 32 30 (you can press multiple keys at once);
+#X text 54 340 y = half pitch;
+#X text 43 360 u = double pitch;
+#X text 30 379 i = randomize;
+#X text 22 396 o = freeze;
+#X text 10 415 p = scratch;
+#X text 265 282 8 = randomize pitch;
+#X text 245 328 0 = robotic feedback;
+#X text 257 307 9 = wah (distorts);
+#X text 52 446 CHANNEL 2: a = random file;
+#X text 116 466 s = back to previous file;
+#X text 113 483 d = mute (when pressed);
+#X text 110 504 f = mute;
+#X text 103 525 g = reverse;
+#X text 94 548 h = half pitch;
+#X text 83 568 j = double pitch;
+#X text 71 589 k = randomize;
+#X text 64 608 l = freeze;
+#X text 269 558 m = scratch;
+#X text 305 490 v = randomize pitch;
+#X text 297 515 b = wah (distorts);
+#X text 285 537 n = robotic feedback;
+#X obj 356 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 364 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 368 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 372 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 16 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 364 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 20 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 24 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 396 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 400 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 404 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 408 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 412 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 416 28 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 356 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 396 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 400 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 404 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 408 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 412 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 416 32 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 396 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 400 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 404 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 408 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 412 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 36 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 376 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 396 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 400 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 404 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 408 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 40 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 376 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 44 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 376 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 48 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 376 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 396 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 400 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 404 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 408 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 52 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 396 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 400 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 404 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 408 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 412 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 56 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 360 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 380 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 384 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 396 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 400 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 404 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 408 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 412 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 416 60 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 388 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 392 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 396 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 400 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 404 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 408 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 412 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 416 64 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -258699
+-262144 0;
+#X obj 356 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 364 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 68 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 364 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 368 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 372 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 72 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 356 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 360 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 364 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 368 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 372 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 376 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 380 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 384 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 388 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -62784
+-262144 0;
+#X obj 392 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 396 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 400 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 404 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 408 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 412 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X obj 416 76 cnv 4 4 4 empty jibberishhhh empty 20 12 0 14 -262144
+-262144 0;
+#X text 32 646 **the 'audioloops' folder is autoloaded on startup \,
+put any loops you want to use in there.;
+#X restore 423 243 pd readme;
+#X obj 18 304 pd/moog;
+#X obj 125 600 dac~;
+#X obj 22 451 pd/lopass;
+#X obj 369 658;
+#X obj 377 272 r analog0;
+#X obj 496 279 r analog1;
+#X msg 494 352;
+#X floatatom 497 311 5 0 0 0 - - -;
+#X floatatom 387 311 5 0 0 0 - - -;
+#X obj 774 412 import pdcontainer;
+#X obj 773 435 h_map;
+#X text 619 296 Asignaciones control: Tab:9 a:97 s:115 o:111 flecha:0
+otra: 61 negro: 32;
+#X connect 1 0 16 0;
+#X connect 1 1 16 1;
+#X connect 12 0 13 0;
+#X connect 16 0 18 0;
+#X connect 16 1 18 1;
+#X connect 18 0 17 0;
+#X connect 18 1 17 1;
+#X connect 20 0 16 2;
+#X connect 20 0 24 0;
+#X connect 21 0 16 3;
+#X connect 21 0 23 0;

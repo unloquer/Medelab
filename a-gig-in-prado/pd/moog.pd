@@ -1,0 +1,44 @@
+#N canvas 318 149 646 361 10;
+#X obj -16 160 inlet~;
+#X obj 34 161 inlet~;
+#X obj -132 332 outlet~;
+#X obj -48 331 outlet~;
+#X obj 1 224 moog~;
+#X obj -43 225 moog~;
+#X obj 106 133 hsl 128 15 20 30000 1 0 empty empty Frecuencia -2 -8
+0 10 -262144 -1 -1 12161 1;
+#X floatatom 103 154 7 0 0 0 - - -;
+#X obj 248 133 hsl 128 15 0 3 0 0 empty empty Resonancia -2 -8 0 10
+-262144 -1 -1 0 1;
+#X floatatom 245 154 7 0 0 0 - - -;
+#X obj -131 273 multiplex~;
+#X obj -50 275 multiplex~;
+#X obj 380 105 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 101 20 inlet;
+#X obj 188 19 inlet;
+#X text 223 17 Float [0 \, 1];
+#X text 25 19 Float [0 \, 1];
+#X obj -4 63 map freq 20 22000 22000 2;
+#X obj 182 62 * 3;
+#X connect 0 0 5 0;
+#X connect 0 0 10 0;
+#X connect 1 0 4 0;
+#X connect 1 0 11 0;
+#X connect 4 0 11 1;
+#X connect 5 0 10 1;
+#X connect 6 0 7 0;
+#X connect 7 0 5 1;
+#X connect 7 0 4 1;
+#X connect 8 0 9 0;
+#X connect 9 0 5 2;
+#X connect 9 0 4 2;
+#X connect 10 0 2 0;
+#X connect 11 0 3 0;
+#X connect 12 0 10 0;
+#X connect 12 0 11 0;
+#X connect 13 0 17 0;
+#X connect 14 0 18 0;
+#X connect 17 1 6 0;
+#X connect 18 0 8 0;
+#X coords 0 -1 1 1 300 80 1 100 100;

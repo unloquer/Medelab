@@ -1,4 +1,4 @@
-#N canvas 1 82 1013 717 10;
+#N canvas 51 50 460 407 10;
 #X declare -lib pduino;
 #X declare -lib pdcontainer;
 #N canvas 461 101 674 677 arduino-recieve 0;
@@ -140,7 +140,7 @@
 #X obj 19 -42 pd/slot 113 13 2 Q;
 #X obj 223 -42 pd/slot 113 12 2 Q;
 #X obj 636 -41 pd/slot 113 10 2 Q;
-#X obj 18 -90 pd/slot 117 9 1 U;
+#X obj 16 -93 pd/slot 117 9 1 U;
 #X obj 698 118 keyup;
 #X floatatom 701 159 5 0 0 0 - - -;
 #X text 298 -196 Controlador tab a s o;
